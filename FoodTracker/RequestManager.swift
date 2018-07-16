@@ -8,7 +8,10 @@
 
 import UIKit
 
-
+enum Constants {
+   static let content = "application/json"
+    static let token = "mzLeVQvHeMyoJy71stmYK99A"
+}
 
 class RequestManager {
     var meal: Meal!
@@ -16,7 +19,7 @@ class RequestManager {
     
     func sendRequest(_ meal: Meal) {
         
-//        let parameters: [String : Any] = ["title" : meal.name, "description": meal.desc, "calories": meal.calories]
+        //        let parameters: [String : Any] = ["title" : meal.name, "description": meal.desc, "calories": meal.calories]
         
         
         let sessionConfig = URLSessionConfiguration.default
@@ -24,8 +27,8 @@ class RequestManager {
         
         let url = URL(string: "https://cloud-tracker.herokuapp.com")!
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-
-
+        
+        
         components.path = "/users/me/meals"
         
         let titleQueryItem = NSURLQueryItem(name: "title", value: meal.name)
@@ -33,24 +36,29 @@ class RequestManager {
         let caloriesQueryItem = NSURLQueryItem(name: "calories", value: String(meal.calories))
         components.queryItems = [titleQueryItem, descriptionQueryItem, caloriesQueryItem] as [URLQueryItem]
         print(#line, components.url ?? "No url")
-        let request = NSMutableURLRequest(url: components.url! )
-
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("mzLeVQvHeMyoJy71stmYK99A", forHTTPHeaderField: "token")
+        var request = URLRequest(url: components.url!)
+        
+        request.setValue(Constants.content, forHTTPHeaderField: "Content-Type")
+        request.setValue(Constants.token, forHTTPHeaderField: "token")
         request.httpMethod = "POST"
         
-/*  let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) -> Void in
- if (error == nil) {
- //success
- let statusCode = (response as! HTTPURLResponse).statusCode
- print("URL Session task succeeded: HTTP \(statusCode)")
- } else {
- //failure
- print("URL session task failed \(error.localizedDescription)")
- }
- }
- */
-        vvvv
+        
+        
+        let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            
+            if (error == nil) {
+                // success
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("URL Session task succeeded: HTTP \(statusCode)")
+            } else if let e = error {
+                //failure
+                print("URL session task failed: \(e.localizedDescription)")
+            }
+        })
+        task.resume()
+        session.finishTasksAndInvalidate()
+        
+        
         
         
         
