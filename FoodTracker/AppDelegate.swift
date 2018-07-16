@@ -17,8 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         let r = RequestManager()
-        let meal = Meal(name: "ggg", photo: nil, rating: 5, desc: "jjjj", calories: 300)
-        r.sendRequest(meal!)
+        let meal1 = Meal(name: "test4", photo: nil, rating: 3, desc: "testing", calories: 600)
+        
+        r.sendRequest(meal1!)
+        
+//        r.sendRequestToUpdateRating(meal1!)
         return true
     }
 
