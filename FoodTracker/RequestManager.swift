@@ -39,7 +39,17 @@ class RequestManager {
         request.setValue("mzLeVQvHeMyoJy71stmYK99A", forHTTPHeaderField: "token")
         request.httpMethod = "POST"
         
-       
+/*  let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+ if (error == nil) {
+ //success
+ let statusCode = (response as! HTTPURLResponse).statusCode
+ print("URL Session task succeeded: HTTP \(statusCode)")
+ } else {
+ //failure
+ print("URL session task failed \(error.localizedDescription)")
+ }
+ }
+ */
         
         
         
