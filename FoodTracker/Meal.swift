@@ -34,7 +34,7 @@ class Meal: NSObject, NSCoding {
         static let rating = "rating"
         static let desc = "description"
         static let calories = "calories"
-        static let id = "id"
+        
     }
     
     //MARK: Initialization
@@ -73,7 +73,7 @@ class Meal: NSObject, NSCoding {
         aCoder.encode(rating, forKey: PropertyKey.rating)
         aCoder.encode(desc, forKey: PropertyKey.desc)
         aCoder.encode(calories, forKey: PropertyKey.calories)
-        aCoder.encode(id, forKey: PropertyKey.id)
+        
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -96,7 +96,7 @@ class Meal: NSObject, NSCoding {
         
         let calories = aDecoder.decodeInteger(forKey: PropertyKey.calories)
         
-        let id = aDecoder.decodeInteger(forKey: PropertyKey.id)
+        
         
         // Must call designated initializer.
         self.init(name: name, photo: photo, rating: rating, desc: desc, calories: calories)

@@ -10,6 +10,7 @@ import UIKit
 import os.log
 
 class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    var requestManager: RequestManager!
     
     //MARK: Properties
     @IBOutlet weak var nameTextField: UITextField!
@@ -20,15 +21,21 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     @IBOutlet weak var caloriesTextField: UITextField!
     
     @IBOutlet weak var descriptionTextField: UITextField!
+    
+    
+    
+  
+    
+    
     /*
          This value is either passed by `MealTableViewController` in `prepare(for:sender:)`
          or constructed as part of adding a new meal.
      */
     var meal: Meal?
-    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+         requestManager = RequestManager()
         // Handle the text field’s user input through delegate callbacks.
         nameTextField.delegate = self
         
@@ -116,13 +123,18 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         let photo = photoImageView.image
         let rating = ratingControl.rating
         let desc = descriptionTextField.text ?? ""
-        let calories = Int(nameTextField.text!)!
-        let id = 1
+        let calories = Int(nameTextField.text!) ?? 0
+        
+
         
 //        caloriesInt = 400
         // Set the meal to be passed to MealTableViewController after the unwind segue.
 //        meal = Meal(name: name, photo: photo, rating: rating, )
         meal = Meal(name: name, photo: photo, rating: rating, desc: desc, calories: calories)
+
+        
+        
+        requestManager.sendRequest(meal!)
     }
     
     //MARK: Actions
@@ -140,6 +152,12 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         // Make sure ViewController is notified when the user picks an image.
         imagePickerController.delegate = self
         present(imagePickerController, animated: true, completion: nil)
+    }
+    @IBAction func saveButtonPressed(_ sender: Any) {
+
+        
+        
+        
     }
     
     //MARK: Private Methods

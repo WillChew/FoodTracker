@@ -11,6 +11,8 @@ import os.log
 
 class MealTableViewController: UITableViewController {
     
+    var requestManager: RequestManager!
+    
     //MARK: Properties
     
     var meals = [Meal]()
@@ -132,6 +134,7 @@ class MealTableViewController: UITableViewController {
             
             let selectedMeal = meals[indexPath.row]
             mealDetailViewController.meal = selectedMeal
+            mealDetailViewController.requestManager = requestManager
             
         default:
             fatalError("Unexpected Segue Identifier; \(segue.identifier)")
