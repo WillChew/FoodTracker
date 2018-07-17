@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="L8g-sl-WVK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ETB-Wp-IgZ">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -167,10 +167,10 @@
             </objects>
             <point key="canvasLocation" x="2018.4000000000001" y="137.18140929535232"/>
         </scene>
-        <!--View Controller-->
+        <!--Signup View Controller-->
         <scene sceneID="ieZ-mV-6Wa">
             <objects>
-                <viewController id="zso-fU-LJF" sceneMemberID="viewController">
+                <viewController id="zso-fU-LJF" customClass="SignupViewController" customModule="FoodTracker" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UFc-fh-r46"/>
                         <viewControllerLayoutGuide type="bottom" id="fEE-yl-i9U"/>
@@ -204,6 +204,10 @@
                                 <rect key="frame" x="163" y="242" width="49" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Submit"/>
+                                <connections>
+                                    <action selector="submitButtonPressed:" destination="zso-fU-LJF" eventType="touchUpInside" id="Ic1-zt-Quf"/>
+                                    <segue destination="tru-c3-rzc" kind="show" identifier="submitButtonSegue" id="NI1-xM-YSH"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2ib-hG-Pyz">
                                 <rect key="frame" x="16" y="189" width="343" height="30"/>
@@ -215,10 +219,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
+                    <navigationItem key="navigationItem" id="i0k-yB-uCg"/>
+                    <connections>
+                        <outlet property="passwordTextField" destination="2ib-hG-Pyz" id="euV-68-ffv"/>
+                        <outlet property="usernameTextField" destination="hhJ-Fg-iOC" id="INE-y2-APS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rFL-gX-ySb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-412" y="-639.13043478260875"/>
+            <point key="canvasLocation" x="527.20000000000005" y="-639.13043478260875"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="v7c-Cq-WhV">
@@ -236,7 +245,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z06-YO-8kb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-922" y="136"/>
+            <point key="canvasLocation" x="-895" y="137"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Faa-0t-4hD">
@@ -256,11 +265,30 @@
             </objects>
             <point key="canvasLocation" x="1089" y="509"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="AdA-ZF-sGO">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ETB-Wp-IgZ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="kpc-HW-EW1">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="zso-fU-LJF" kind="relationship" relationship="rootViewController" id="SQP-1M-oLx"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2Gz-5c-QHl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-412" y="-639.13043478260875"/>
+        </scene>
     </scenes>
     <resources>
         <image name="defaultPhoto" width="540" height="540"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="OYG-Wr-wrS"/>
+        <segue reference="NI1-xM-YSH"/>
     </inferredMetricsTieBreakers>
 </document>

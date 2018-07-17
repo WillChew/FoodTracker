@@ -49,12 +49,10 @@ class Meal: NSObject, NSCoding {
         // The rating must be between 0 and 5 inclusively
         if let rating = rating {
             if (rating >= 0) && (rating <= 5) {
-                self.rating = 0
-            } else {
                 self.rating = rating
+            } else {
+                self.rating = 0
             }
-        } else {
-            self.rating = nil
         }
         // Initialization should fail if there is no name or if the rating is negative.
         if name.isEmpty {

@@ -22,11 +22,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     
     @IBOutlet weak var descriptionTextField: UITextField!
     
-    
-    
-  
-    
-    
+
     /*
          This value is either passed by `MealTableViewController` in `prepare(for:sender:)`
          or constructed as part of adding a new meal.
@@ -157,9 +153,6 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     }
     @IBAction func saveButtonPressed(_ sender: Any) {
 
-        
-        
-        
     }
     
     //MARK: Private Methods

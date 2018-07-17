@@ -26,14 +26,18 @@ class MealTableViewController: UITableViewController {
         if let savedMeals = loadMeals() {
             meals += savedMeals
         }
-
+        
         // Use the edit button item provided by the table view controller.
         navigationItem.leftBarButtonItem = editButtonItem
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        fetchMeals()
         
+    }
+    
+    func fetchMeals() {
         requestManager = RequestManager()
         requestManager.getAllMeals { (meals) in
             print(meals.count)
@@ -42,10 +46,8 @@ class MealTableViewController: UITableViewController {
         }
         
         tableView.reloadData()
-
-      
-    
-}
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -172,14 +174,14 @@ class MealTableViewController: UITableViewController {
             }
             else {
                 // Add a new meal.
-//                let newIndexPath = IndexPath(row: meals.count, section: 0)
+                let newIndexPath = IndexPath(row: meals.count, section: 0)
                 
 //                tableView.insertRows(at: [newIndexPath], with: .automatic)
             }
             
             // Save the meals.
             saveMeals()
-            self.tableView.reloadData()
+            
         }
     }
     

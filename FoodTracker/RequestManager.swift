@@ -61,8 +61,10 @@ class RequestManager {
             guard let mealData = jsonResult["meal"], let id = mealData["id"] as? Int else {return}
             
             meal.id = id
-//            self.sendRequestToUpdateRating(meal, mealRating: meal.rating!)
-            
+            self.sendRequestToUpdateRating(meal, mealRating: meal.rating!, completion: {
+                (meal) in
+                meal.rating = meal.rating
+            })
         })
         
         task.resume()
@@ -70,7 +72,7 @@ class RequestManager {
         
     }
     
-    func sendRequestToUpdateRating(_ meal: Meal!, mealRating: Int) {
+    func sendRequestToUpdateRating(_ meal: Meal!, mealRating: Int, completion: @escaping ((Meal) -> Void))  {
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         let url = URL(string: "https://cloud-tracker.herokuapp.com")!
@@ -82,7 +84,7 @@ class RequestManager {
         components.path = "/users/me/meals/\(mealID)/rate"
         
         let ratingStr = String(mealRating)
-       
+        
         
         let ratingQueryItem = URLQueryItem(name: "rating", value: ratingStr)
         components.queryItems = [ratingQueryItem] as [URLQueryItem]
@@ -108,7 +110,7 @@ class RequestManager {
     }
     
     func getAllMeals(completion: @escaping ([Meal]) -> Void) {
-         var mealArrayOriginal = [Meal]()
+        var mealArrayOriginal = [Meal]()
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         let url = URL(string: "https://cloud-tracker.herokuapp.com/users/me/meals")!
@@ -131,36 +133,51 @@ class RequestManager {
             guard let jsonResult = try! JSONSerialization.jsonObject(with: data) as? Array<Dictionary<String, Any?>> else { return }
             
             
-           
-//            var mealArray = [Meal]()
-
+            
+            //            var mealArray = [Meal]()
+            
             for meals in jsonResult {
                 
                 guard let title = meals["title"], let photo = meals["imagePath"], let desc = meals["description"], let rating = meals["rating"] else {
                     return
                 }
-
+                
                 let newMeal = Meal(name: title as! String, photo: photo as? UIImage, rating: rating as? Int, desc: desc as! String, calories: meals["calories"] as! Int)
                 
-            mealArrayOriginal.append(newMeal!)
-                            }
+                mealArrayOriginal.append(newMeal!)
+            }
             completion(mealArrayOriginal)
-
+            
         })
         task.resume()
         session.finishTasksAndInvalidate()
         
     }
     
-    func signUpRequest(){
+    func signUpRequest(_ user: User){
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         let url = URL(string: "https://cloud-tracker.herokuapp.com")!
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         components.path = "/signup"
-       let signupQueryItem = NSURLQueryItem(name: "username", value: <#T##String?#>)
+        let usernameQueryItem = NSURLQueryItem(name: "username", value: user.username)
+        let passwordQueryItem = NSURLQueryItem(name: "password", value: user.password)
+        components.queryItems = [usernameQueryItem, passwordQueryItem] as [URLQueryItem]
+        var request = URLRequest(url: components.url!)
+        
+        request.setValue(Constants.content, forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        
+        let task = session.dataTask(with: request, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if (error == nil){
+                //success
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("URL Session task succeeded: \(statusCode)")
+            } else if let error = error {
+                //failed
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("URL Session task succeeded: \(error.localizedDescription)")
+            }
+        })
     }
-    
-    
-    
 }
