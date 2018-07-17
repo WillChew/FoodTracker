@@ -33,10 +33,10 @@ class MealTableViewController: UITableViewController {
         // Use the edit button item provided by the table view controller.
         navigationItem.leftBarButtonItem = editButtonItem
         
-        // Load any saved meals, otherwise load sample data.
-        if let savedMeals = loadMeals() {
-            meals += savedMeals
-        }
+//         Load any saved meals, otherwise load sample data.
+//        if let savedMeals = loadMeals() {
+//            meals += savedMeals
+//        }
 //        else {
 //            // Load the sample data.
 //            loadSampleMeals()
@@ -51,9 +51,8 @@ class MealTableViewController: UITableViewController {
         requestManager.getAllMeals { (meals) in
             print(meals)
             self.meals = meals
-            self.tableView2.reloadData()
         }
-        
+        self.tableView2.reloadData()
         print(meals)
         
     }
@@ -179,7 +178,8 @@ class MealTableViewController: UITableViewController {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update an existing meal.
                 meals[selectedIndexPath.row] = meal
-                tableView.reloadRows(at: [selectedIndexPath], with: .none)
+                requestManager.sendRequestToUpdateRating(meal, mealRating: meal.rating!)
+//                tableView.reloadRows(at: [selectedIndexPath], with: .none)
             }
             else {
                 // Add a new meal.

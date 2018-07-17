@@ -61,7 +61,7 @@ class RequestManager {
             guard let mealData = jsonResult["meal"], let id = mealData["id"] as? Int else {return}
             
             meal.id = id
-            self.sendRequestToUpdateRating(meal)
+            self.sendRequestToUpdateRating(meal, mealRating: 5)
             
         })
         
@@ -70,7 +70,7 @@ class RequestManager {
         
     }
     
-    func sendRequestToUpdateRating(_ meal: Meal!) {
+    func sendRequestToUpdateRating(_ meal: Meal!, mealRating: Int) {
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         let url = URL(string: "https://cloud-tracker.herokuapp.com")!
@@ -80,12 +80,11 @@ class RequestManager {
             return
         }
         
+        
         components.path = "/users/me/meals/\(mealID)/rate"
         
-        guard let rating = meal.rating else {
-            return
-        }
-       let ratingStr = String(rating)
+        let ratingStr = String(mealRating)
+       
         
         let ratingQueryItem = URLQueryItem(name: "rating", value: ratingStr)
         components.queryItems = [ratingQueryItem] as [URLQueryItem]
@@ -147,6 +146,8 @@ class RequestManager {
                    let rating = 0
                     return
                 }
+                
+                
                 
                 let newMeal = Meal(name: title as! String, photo: photo as? UIImage, rating: rating as? Int, desc: desc as! String, calories: meals["calories"] as! Int)
 //                self.sendRequestToUpdateRating(newMeal)
