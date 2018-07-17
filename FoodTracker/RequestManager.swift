@@ -152,6 +152,15 @@ class RequestManager {
         
     }
     
+    func signUpRequest(){
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        let url = URL(string: "https://cloud-tracker.herokuapp.com")!
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        components.path = "/signup"
+       let signupQueryItem = NSURLQueryItem(name: "username", value: <#T##String?#>)
+    }
+    
     
     
 }
