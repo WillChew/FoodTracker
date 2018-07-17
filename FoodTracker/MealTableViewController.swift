@@ -177,21 +177,21 @@ class MealTableViewController: UITableViewController {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update an existing meal.
                 meals[selectedIndexPath.row] = meal
-                requestManager.sendRequestToUpdateRating(meal, mealRating: meal.rating!)
-//                tableView.reloadRows(at: [selectedIndexPath], with: .none)
+                tableView.reloadRows(at: [selectedIndexPath], with: .none)
             }
             else {
                 // Add a new meal.
 //                let newIndexPath = IndexPath(row: meals.count, section: 0)
-                
+                requestManager.sendRequestToUpdateRating(meal, mealRating: meal.rating!)
+
                 meals.append(meal)
                 
 //                tableView.insertRows(at: [newIndexPath], with: .automatic)
             }
             
             // Save the meals.
-            self.tableView.reloadData()
             saveMeals()
+            self.tableView.reloadData()
         }
     }
     

@@ -135,7 +135,6 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
 
         
         
-        requestManager.sendRequest(meal!)
 //        requestManager.sendRequestToUpdateRating(meal, mealRating: rating)
         
     }
