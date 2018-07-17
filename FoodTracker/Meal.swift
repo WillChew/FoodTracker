@@ -54,7 +54,7 @@ class Meal: NSObject, NSCoding {
                 self.rating = rating
             }
         } else {
-            self.rating = nil
+            self.rating = 0
         }
         // Initialization should fail if there is no name or if the rating is negative.
         if name.isEmpty {

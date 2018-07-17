@@ -16,7 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let requestManager = RequestManager()
+        
+       
 //        let meal1 = Meal(name: "test4", photo: nil, rating: 3, desc: "testing", calories: 600)
 //
 //        requestManager.sendRequest(meal1!)
@@ -25,9 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         guard let nav = window?.rootViewController as? UINavigationController, let rootController = nav.topViewController as? MealTableViewController else {
             return false }
+        let requestManager = RequestManager()
         rootController.requestManager = requestManager
-        
-    requestManager.getAllMeals()
+//         requestManager.getAllMeals()
+
         
         return true
     }

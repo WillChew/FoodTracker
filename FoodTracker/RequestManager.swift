@@ -110,7 +110,7 @@ class RequestManager {
         session.finishTasksAndInvalidate()
     }
     
-    func getAllMeals() -> [Meal] {
+    func getAllMeals(completion: @escaping ([Meal]) -> Void) {
          var mealArrayOriginal = [Meal]()
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
@@ -132,7 +132,7 @@ class RequestManager {
             }
             guard let data = data else { return }
             guard let jsonResult = try! JSONSerialization.jsonObject(with: data) as? Array<Dictionary<String, Any?>> else { return }
-            print(jsonResult)
+            
             
            
 //            var mealArray = [Meal]()
@@ -148,23 +148,17 @@ class RequestManager {
                     return
                 }
                 
-                
-                
                 let newMeal = Meal(name: title as! String, photo: photo as? UIImage, rating: rating as? Int, desc: desc as! String, calories: meals["calories"] as! Int)
 //                self.sendRequestToUpdateRating(newMeal)
                 
             mealArrayOriginal.append(newMeal!)
+                            }
+            completion(mealArrayOriginal)
 
-            }
-            
-            
-            
-            
-            
         })
         task.resume()
         session.finishTasksAndInvalidate()
-        return mealArrayOriginal
+        
     }
     
     
