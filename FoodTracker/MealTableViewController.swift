@@ -52,7 +52,7 @@ class MealTableViewController: UITableViewController {
             print(meals)
             self.meals = meals
         }
-        self.tableView2.reloadData()
+        tableView.reloadData()
         print(meals)
         
     }

@@ -123,7 +123,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         let photo = photoImageView.image
         let rating = ratingControl.rating 
         let desc = descriptionTextField.text ?? ""
-        let calories = Int(nameTextField.text!) ?? 0
+        let calories = Int(caloriesTextField.text!) ?? 0
         
 
         
@@ -135,6 +135,8 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         
         
         requestManager.sendRequest(meal!)
+        requestManager.sendRequestToUpdateRating(meal, mealRating: rating)
+        
     }
     
     //MARK: Actions
