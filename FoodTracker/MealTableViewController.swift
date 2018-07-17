@@ -19,12 +19,7 @@ class MealTableViewController: UITableViewController {
     var meals = [Meal]()
     
     var requestManager: RequestManager!
-    
 
-
-
-   
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,6 +28,15 @@ class MealTableViewController: UITableViewController {
         // Use the edit button item provided by the table view controller.
         navigationItem.leftBarButtonItem = editButtonItem
         
+        
+        requestManager = RequestManager()
+        requestManager.getAllMeals { (meals) in
+            print(meals)
+            self.meals = meals
+        }
+        tableView.reloadData()
+        
+    
 //         Load any saved meals, otherwise load sample data.
         if let savedMeals = loadMeals() {
             meals += savedMeals
@@ -41,24 +45,18 @@ class MealTableViewController: UITableViewController {
 //            // Load the sample data.
 //            loadSampleMeals()
 //        }
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         
-        requestManager = RequestManager()
-        requestManager.getAllMeals { (meals) in
-            print(meals)
-            self.meals = meals
-        }
-        tableView.reloadData()
-        print(meals)
-        
-    }
+
     
     
-    
+}
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -167,6 +165,7 @@ class MealTableViewController: UITableViewController {
         default:
             fatalError("Unexpected Segue Identifier; \(segue.identifier)")
         }
+        tableView.reloadData()
     }
     
     
@@ -188,10 +187,10 @@ class MealTableViewController: UITableViewController {
                 meals.append(meal)
                 
 //                tableView.insertRows(at: [newIndexPath], with: .automatic)
-               self.tableView2.reloadData()
             }
             
             // Save the meals.
+            self.tableView.reloadData()
             saveMeals()
         }
     }

@@ -117,6 +117,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         guard let button = sender as? UIBarButtonItem, button === saveButton else {
             os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
             return
+            
         }
         
         let name = nameTextField.text ?? ""
@@ -135,7 +136,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         
         
         requestManager.sendRequest(meal!)
-        requestManager.sendRequestToUpdateRating(meal, mealRating: rating)
+//        requestManager.sendRequestToUpdateRating(meal, mealRating: rating)
         
     }
     

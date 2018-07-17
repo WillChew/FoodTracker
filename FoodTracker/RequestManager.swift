@@ -61,7 +61,7 @@ class RequestManager {
             guard let mealData = jsonResult["meal"], let id = mealData["id"] as? Int else {return}
             
             meal.id = id
-//            self.sendRequestToUpdateRating(meal, mealRating: 5)
+//            self.sendRequestToUpdateRating(meal, mealRating: meal.rating!)
             
         })
         
@@ -79,8 +79,6 @@ class RequestManager {
         guard let mealID = meal.id else {
             return
         }
-        
-        
         components.path = "/users/me/meals/\(mealID)/rate"
         
         let ratingStr = String(mealRating)
