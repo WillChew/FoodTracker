@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return false }
         rootController.requestManager = requestManager
         
+    requestManager.getAllMeals()
         
         return true
     }

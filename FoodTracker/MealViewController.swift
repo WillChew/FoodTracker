@@ -44,7 +44,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
             navigationItem.title = meal.name
             nameTextField.text = meal.name
             photoImageView.image = meal.photo
-            ratingControl.rating = meal.rating
+            ratingControl.rating = meal.rating ?? 0
             descriptionTextField.text = meal.desc
             caloriesTextField.text = String(meal.calories)
         }

@@ -81,9 +81,13 @@ class RequestManager {
         }
         
         components.path = "/users/me/meals/\(mealID)/rate"
-        let rating = String(meal.rating)
         
-        let ratingQueryItem = URLQueryItem(name: "rating", value: rating)
+        guard let rating = meal.rating else {
+            return
+        }
+       let ratingStr = String(rating)
+        
+        let ratingQueryItem = URLQueryItem(name: "rating", value: ratingStr)
         components.queryItems = [ratingQueryItem] as [URLQueryItem]
         
         var request = URLRequest(url: components.url!)
@@ -105,4 +109,64 @@ class RequestManager {
         task.resume()
         session.finishTasksAndInvalidate()
     }
+    
+    func getAllMeals() -> [Meal] {
+         var mealArrayOriginal = [Meal]()
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        let url = URL(string: "https://cloud-tracker.herokuapp.com/users/me/meals")!
+        var request = URLRequest(url: url)
+        
+        request.setValue("", forHTTPHeaderField: "Content-Type")
+        request.setValue(Constants.token, forHTTPHeaderField: "token")
+        request.httpMethod = "GET"
+        
+        let task = session.dataTask(with: request, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if (error == nil) {
+                //success
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("URL Session task succeeded: \(statusCode)")
+            } else if let error = error{
+                //error
+                print("error: \(error.localizedDescription)")
+            }
+            guard let data = data else { return }
+            guard let jsonResult = try! JSONSerialization.jsonObject(with: data) as? Array<Dictionary<String, Any?>> else { return }
+            print(jsonResult)
+            
+           
+//            var mealArray = [Meal]()
+
+            for meals in jsonResult {
+                
+                guard let title = meals["title"], let photo = meals["imagePath"], let desc = meals["description"] else {
+                    return
+                }
+                
+                guard let rating = meals["rating"] else {
+                   let rating = 0
+                    return
+                }
+                
+                
+                
+                let newMeal = Meal(name: title as! String, photo: photo as? UIImage, rating: rating as? Int, desc: desc as! String, calories: meals["calories"] as! Int)
+//                self.sendRequestToUpdateRating(newMeal)
+                
+            mealArrayOriginal.append(newMeal!)
+
+            }
+            
+            
+            
+            
+            
+        })
+        task.resume()
+        session.finishTasksAndInvalidate()
+        return mealArrayOriginal
+    }
+    
+    
+    
 }

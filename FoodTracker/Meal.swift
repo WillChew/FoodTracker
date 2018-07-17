@@ -16,7 +16,7 @@ class Meal: NSObject, NSCoding {
     
     var name: String
     var photo: UIImage?
-    var rating: Int
+    var rating: Int?
     var desc: String
     var calories: Int
     var id: Int?
@@ -39,27 +39,31 @@ class Meal: NSObject, NSCoding {
     
     //MARK: Initialization
     
-    init?(name: String, photo: UIImage?, rating: Int, desc: String, calories: Int) {
+    init?(name: String, photo: UIImage?, rating: Int?, desc: String, calories: Int) {
         
         // The name must not be empty
         guard !name.isEmpty else {
             return nil
         }
-
-        // The rating must be between 0 and 5 inclusively
-        guard (rating >= 0) && (rating <= 5) else {
-            return nil
-        }
         
+        // The rating must be between 0 and 5 inclusively
+        if let rating = rating {
+            if (rating >= 0) && (rating <= 5) {
+                self.rating = 0
+            } else {
+                self.rating = rating
+            }
+        } else {
+            self.rating = nil
+        }
         // Initialization should fail if there is no name or if the rating is negative.
-        if name.isEmpty || rating < 0  {
+        if name.isEmpty {
             return nil
         }
         
         // Initialize stored properties.
         self.name = name
         self.photo = photo
-        self.rating = rating
         self.desc = desc
         self.calories = calories
         
