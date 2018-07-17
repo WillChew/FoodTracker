@@ -34,9 +34,9 @@ class MealTableViewController: UITableViewController {
         navigationItem.leftBarButtonItem = editButtonItem
         
 //         Load any saved meals, otherwise load sample data.
-//        if let savedMeals = loadMeals() {
-//            meals += savedMeals
-//        }
+        if let savedMeals = loadMeals() {
+            meals += savedMeals
+        }
 //        else {
 //            // Load the sample data.
 //            loadSampleMeals()
