@@ -136,19 +136,11 @@ class RequestManager {
 
             for meals in jsonResult {
                 
-                guard let title = meals["title"], let photo = meals["imagePath"], let desc = meals["description"] else {
+                guard let title = meals["title"], let photo = meals["imagePath"], let desc = meals["description"], let rating = meals["rating"] else {
                     return
                 }
-                
-                guard let rating = meals["rating"] else {
-                   let rating = 0
-                    return
-                }
-                
-                
-                
+
                 let newMeal = Meal(name: title as! String, photo: photo as? UIImage, rating: rating as? Int, desc: desc as! String, calories: meals["calories"] as! Int)
-//                self.sendRequestToUpdateRating(newMeal)
                 
             mealArrayOriginal.append(newMeal!)
                             }

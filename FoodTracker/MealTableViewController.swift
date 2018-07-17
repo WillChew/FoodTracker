@@ -22,39 +22,28 @@ class MealTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
-        
-        // Use the edit button item provided by the table view controller.
-        navigationItem.leftBarButtonItem = editButtonItem
-        
-        
-        requestManager = RequestManager()
-        requestManager.getAllMeals { (meals) in
-            print(meals)
-            self.meals = meals
-        }
-        tableView.reloadData()
-        
-    
-//         Load any saved meals, otherwise load sample data.
         if let savedMeals = loadMeals() {
             meals += savedMeals
         }
-//        else {
-//            // Load the sample data.
-//            loadSampleMeals()
-//        }
-        
-        
+
+        // Use the edit button item provided by the table view controller.
+        navigationItem.leftBarButtonItem = editButtonItem
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        requestManager = RequestManager()
+        requestManager.getAllMeals { (meals) in
+            print(meals.count)
+            self.meals = meals
+            
+        }
         
+        tableView.reloadData()
 
-    
+      
     
 }
     override func didReceiveMemoryWarning() {
@@ -177,14 +166,13 @@ class MealTableViewController: UITableViewController {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update an existing meal.
                 meals[selectedIndexPath.row] = meal
-                tableView.reloadRows(at: [selectedIndexPath], with: .none)
+                requestManager.sendRequest(meal)
+
+//                tableView.reloadRows(at: [selectedIndexPath], with: .none)
             }
             else {
                 // Add a new meal.
 //                let newIndexPath = IndexPath(row: meals.count, section: 0)
-                requestManager.sendRequestToUpdateRating(meal, mealRating: meal.rating!)
-
-                meals.append(meal)
                 
 //                tableView.insertRows(at: [newIndexPath], with: .automatic)
             }

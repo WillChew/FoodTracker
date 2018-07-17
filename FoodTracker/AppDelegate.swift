@@ -24,10 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         
         
-        guard let nav = window?.rootViewController as? UINavigationController, let rootController = nav.topViewController as? MealTableViewController else {
-            return false }
-        let requestManager = RequestManager()
-        rootController.requestManager = requestManager
+//        guard let nav = window?.rootViewController as? UINavigationController, let rootController = nav.topViewController as? MealTableViewController else {
+//            return false }
+//        let requestManager = RequestManager()
+//        rootController.requestManager = requestManager
 //         requestManager.getAllMeals()
 
         
