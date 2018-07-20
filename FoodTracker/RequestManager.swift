@@ -39,10 +39,10 @@ class RequestManager {
                 let theStatusCode = (response as! HTTPURLResponse).statusCode
                 if theStatusCode == 409 {
                      UserDefaults.standard.set(true, forKey: "existing")
-                }
+                } else {
                 print("URL Session task succeeded: \(theStatusCode)")
                 UserDefaults.standard.set(true, forKey: "wasLaunched")
-                
+                }
             } else if let error = error {
                 //failed
                 print("URL Session task failed: \(error.localizedDescription)")

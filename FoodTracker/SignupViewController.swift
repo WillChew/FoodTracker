@@ -128,6 +128,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                 if UserDefaults.standard.bool(forKey: "existing") == true {
                     self.alert.message = "User already exists"
                     self.present(self.alert, animated: true, completion: nil)
+                    UserDefaults.standard.set(false, forKey: "existing")
                     
                 } else {
                     self.navigationController?.pushViewController(rootVC, animated: true)
@@ -138,7 +139,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     }
     
     func makeBadInfoAlert(){
-        badInfoAlert = UIAlertController(title: "Log In", message: "Bad credentials. Try again", preferredStyle: .alert)
+        badInfoAlert = UIAlertController(title: "Log In", message: "Bad credentials", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Try Again", style: .destructive) { (action) in }
         
          badInfoAlert.addAction(okAction)
