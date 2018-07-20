@@ -24,10 +24,10 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         createAlert()
         
-requestManager = RequestManager()
+        requestManager = RequestManager()
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -38,23 +38,23 @@ requestManager = RequestManager()
         self.passwordTextField.text = passwordTextField.text
         textField.resignFirstResponder()
     }
-
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
     @IBAction func submitButtonPressed(_ sender: UIButton) {
         
         guard let username = usernameTextField.text, let password = passwordTextField.text else {
             return
         }
-    
-    let newUser = User(username: username, password: password)
+        
+        let newUser = User(username: username, password: password)
         UserDefaults.standard.setValuesForKeys([username : password])
         requestManager.signUpRequest(newUser) {
             // instantiate VC
@@ -72,7 +72,7 @@ requestManager = RequestManager()
     }
     
     func createAlert() {
-         alert = UIAlertController(title: "Signup", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "Signup", message: "", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Signup", style: .default, handler: self.submitButtonPressed2)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addTextField(configurationHandler: usernameTextField)
@@ -97,7 +97,20 @@ requestManager = RequestManager()
     }
     
     func submitButtonPressed2(alert: UIAlertAction!){
+        guard let username = newUsernameTextField.text, let password = newPasswordTextField.text else {
+            return
+        }
         
-    
-}
+        let newUser = User(username: username, password: password)
+        UserDefaults.standard.setValuesForKeys([username : password])
+        requestManager.signUpRequest(newUser) {
+            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let rootVC = mainStoryboard.instantiateViewController(withIdentifier: "MealTableViewController") as UIViewController
+            //push to VC
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(rootVC, animated: true)
+            }
+        }
+        
+    }
 }
