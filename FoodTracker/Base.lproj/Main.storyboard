@@ -207,7 +207,7 @@
                                 <rect key="frame" x="163" y="227" width="49" height="30"/>
                                 <state key="normal" title="Submit"/>
                                 <connections>
-                                    <action selector="submitButtonPressed:" destination="zso-fU-LJF" eventType="touchUpInside" id="Ic1-zt-Quf"/>
+                                    <action selector="loginButtonPressed:" destination="zso-fU-LJF" eventType="touchUpInside" id="FKU-Fk-EhJ"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -238,7 +238,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Sign Up"/>
                                 <connections>
-                                    <action selector="signupButtonPressed:" destination="zso-fU-LJF" eventType="touchUpInside" id="IAF-Cv-G6b"/>
+                                    <action selector="signupButtonPressed:" destination="zso-fU-LJF" eventType="touchUpInside" id="6K0-fI-CmI"/>
                                 </connections>
                             </button>
                         </barButtonItem>

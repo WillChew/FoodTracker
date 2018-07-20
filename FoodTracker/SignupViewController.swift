@@ -48,15 +48,15 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
      // Pass the selected object to the new view controller.
      }
      */
-    @IBAction func submitButtonPressed(_ sender: UIButton) {
+    @IBAction func loginButtonPressed(_ sender: UIButton) {
         
         guard let username = usernameTextField.text, let password = passwordTextField.text else {
             return
         }
         
-        let newUser = User(username: username, password: password)
+        let existingUser = User(username: username, password: password)
         UserDefaults.standard.setValuesForKeys([username : password])
-        requestManager.signUpRequest(newUser) {
+        requestManager.loginRequest(existingUser) {
             // instantiate VC
             let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let rootVC = mainStoryboard.instantiateViewController(withIdentifier: "MealTableViewController") as UIViewController

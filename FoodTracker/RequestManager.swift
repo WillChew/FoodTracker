@@ -55,6 +55,42 @@ class RequestManager {
         session.finishTasksAndInvalidate()
     }
     
+    func loginRequest(_ user: User, completion: @escaping() -> Void) {
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        let url = URL(string: "https://cloud-tracker.herokuapp.com")!
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        components.path = "/login"
+        let usernameQueryItem = URLQueryItem(name: "username", value: user.username)
+        let passwordQueryItem = URLQueryItem(name: "password", value: user.password)
+        components.queryItems = [usernameQueryItem, passwordQueryItem]
+        var request = URLRequest(url: components.url!)
+        request.setValue(Constants.content, forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        
+        let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if error == nil {
+                //success
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("Data task succeeded: \(statusCode)")
+                
+            } else if let error = error {
+                //failed
+                print("data task failed with error: \(error.localizedDescription)")
+            }
+            guard let data = data else { return }
+            guard let jsonResult = try! JSONSerialization.jsonObject(with: data) as? Dictionary<String,Any?>  else { return }
+            let token = jsonResult["token"] as? String
+            UserDefaults.standard.set(token, forKey: "token")
+            completion()
+            
+        })
+        task.resume()
+        session.finishTasksAndInvalidate()
+    }
+    
+    
+    
     func sendRequest(_ meal: Meal){
         
         let sessionConfig = URLSessionConfiguration.default
