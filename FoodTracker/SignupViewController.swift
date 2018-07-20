@@ -57,16 +57,24 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         let existingUser = User(username: username, password: password)
         UserDefaults.standard.setValuesForKeys([username : password])
         requestManager.loginRequest(existingUser) {
-            // instantiate VC
-            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let rootVC = mainStoryboard.instantiateViewController(withIdentifier: "MealTableViewController") as UIViewController
+            
+            
+            
             //push to VC
             DispatchQueue.main.async {
+                
+                // instantiate VC
+                let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let rootVC = mainStoryboard.instantiateViewController(withIdentifier: "MealTableViewController") as UIViewController
+                
+                
                 self.navigationController?.pushViewController(rootVC, animated: true)
+                
             }
         }
-        
     }
+    
+    
     @IBAction func signupButtonPressed(_ sender: UIButton) {
         present(self.alert, animated: true, completion: nil)
     }
@@ -104,13 +112,21 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         let newUser = User(username: username, password: password)
         UserDefaults.standard.setValuesForKeys([username : password])
         requestManager.signUpRequest(newUser) {
-            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let rootVC = mainStoryboard.instantiateViewController(withIdentifier: "MealTableViewController") as UIViewController
+            
             //push to VC
             DispatchQueue.main.async {
-                self.navigationController?.pushViewController(rootVC, animated: true)
+                let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let rootVC = mainStoryboard.instantiateViewController(withIdentifier: "MealTableViewController") as UIViewController
+                if UserDefaults.standard.bool(forKey: "existing") == true {
+                    self.alert.message = "User already exists"
+                    self.present(self.alert, animated: true, completion: nil)
+                    
+                } else {
+                    self.navigationController?.pushViewController(rootVC, animated: true)
+                }
             }
         }
         
     }
+    
 }

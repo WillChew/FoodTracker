@@ -36,9 +36,13 @@ class RequestManager {
         let task = session.dataTask(with: request, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) -> Void in
             if (error == nil){
                 //success
-                let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session task succeeded: \(statusCode)")
+                let theStatusCode = (response as! HTTPURLResponse).statusCode
+                if theStatusCode == 409 {
+                     UserDefaults.standard.set(true, forKey: "existing")
+                }
+                print("URL Session task succeeded: \(theStatusCode)")
                 UserDefaults.standard.set(true, forKey: "wasLaunched")
+                
             } else if let error = error {
                 //failed
                 print("URL Session task failed: \(error.localizedDescription)")
