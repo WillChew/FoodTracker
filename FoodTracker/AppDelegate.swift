@@ -12,27 +12,55 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+let wasLaunchedKey = "wasLaunched"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-       
+        UserDefaults.standard.set(false, forKey: "wasLaunched")
+
 //        let meal1 = Meal(name: "test4", photo: nil, rating: 3, desc: "testing", calories: 600)
 //
 //        requestManager.sendRequest(meal1!)
+        window = UIWindow()
+        let wasLaunched = UserDefaults.standard.bool(forKey: wasLaunchedKey)
+        
+        if wasLaunched {
+            loadMainApp()
+        } else {
+            loadSignup()
+        }
+        window?.makeKeyAndVisible()
+        return true
+    }
+        
+        
+        
+    private func loadSignup() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
+        let rootVC = storyboard.instantiateViewController(withIdentifier: "SignupViewController") as UIViewController
+        let navigationController = UINavigationController(rootViewController: rootVC)
+        
+        self.window?.rootViewController = navigationController
         
         
-//        guard let nav = window?.rootViewController as? UINavigationController, let rootController = nav.topViewController as? MealTableViewController else {
-//            return false }
+        
+        
 //        let requestManager = RequestManager()
 //        rootController.requestManager = requestManager
 //         requestManager.getAllMeals()
-
-        
-        return true
     }
+        private func loadMainApp() {
+            
+            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+           
+            let rootVC = mainStoryboard.instantiateViewController(withIdentifier: "MealTableViewController") as UIViewController
+            let navigationController = UINavigationController(rootViewController: rootVC)
+            
+            self.window?.rootViewController = navigationController
+            
+        }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

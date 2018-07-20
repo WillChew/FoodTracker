@@ -43,9 +43,12 @@ class MealTableViewController: UITableViewController {
             print(meals.count)
             self.meals = meals
             
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            
         }
         
-        tableView.reloadData()
         
     }
     override func didReceiveMemoryWarning() {
@@ -60,6 +63,7 @@ class MealTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return meals.count
     }
     
@@ -142,7 +146,7 @@ class MealTableViewController: UITableViewController {
             }
             
             guard let selectedMealCell = sender as? MealTableViewCell else {
-                fatalError("Unexpected sender: \(sender)")
+                fatalError("Unexpected sender: \(sender!)")
             }
             
             guard let indexPath = tableView.indexPath(for: selectedMealCell) else {
@@ -154,9 +158,9 @@ class MealTableViewController: UITableViewController {
             mealDetailViewController.requestManager = requestManager
             
         default:
-            fatalError("Unexpected Segue Identifier; \(segue.identifier)")
+            fatalError("Unexpected Segue Identifier; \(segue.identifier!)")
         }
-        tableView.reloadData()
+//        tableView.reloadData()
     }
     
     
@@ -172,12 +176,12 @@ class MealTableViewController: UITableViewController {
 
 //                tableView.reloadRows(at: [selectedIndexPath], with: .none)
             }
-            else {
+//            else {
                 // Add a new meal.
-                let newIndexPath = IndexPath(row: meals.count, section: 0)
+//                let newIndexPath = IndexPath(row: meals.count, section: 0)
                 
 //                tableView.insertRows(at: [newIndexPath], with: .automatic)
-            }
+//            }
             
             // Save the meals.
             saveMeals()

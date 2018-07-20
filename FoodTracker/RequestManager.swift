@@ -16,7 +16,44 @@ enum Constants {
 
 class RequestManager {
     var meal: Meal!
+//    var token: String = UserDefaults.standard.object(forKey: "token") as! String
     
+    
+    func signUpRequest(_ user: User, completion: @escaping () -> Void) {
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        let url = URL(string: "https://cloud-tracker.herokuapp.com")!
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        components.path = "/signup"
+        let usernameQueryItem = NSURLQueryItem(name: "username", value: user.username)
+        let passwordQueryItem = NSURLQueryItem(name: "password", value: user.password)
+        components.queryItems = [usernameQueryItem, passwordQueryItem] as [URLQueryItem]
+        var request = URLRequest(url: components.url!)
+        
+        request.setValue(Constants.content, forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        
+        let task = session.dataTask(with: request, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if (error == nil){
+                //success
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("URL Session task succeeded: \(statusCode)")
+                UserDefaults.standard.set(true, forKey: "wasLaunched")
+            } else if let error = error {
+                //failed
+                
+                print("URL Session task failed: \(error.localizedDescription)")
+            }
+            
+            guard let data = data else { return }
+            guard let jsonresult = try! JSONSerialization.jsonObject(with: data) as? Dictionary<String,Any?>  else { return }
+            let token = jsonresult["token"] as? String
+            UserDefaults.standard.set(token, forKey: "token")
+            completion()
+        })
+        task.resume()
+        session.finishTasksAndInvalidate()
+    }
     
     func sendRequest(_ meal: Meal){
         
@@ -36,7 +73,7 @@ class RequestManager {
         var request = URLRequest(url: components.url!)
         
         request.setValue(Constants.content, forHTTPHeaderField: "Content-Type")
-        request.setValue(Constants.token, forHTTPHeaderField: "token")
+        request.setValue(UserDefaults.standard.object(forKey: "token") as? String, forHTTPHeaderField: "token")
         request.httpMethod = "POST"
         
         
@@ -61,10 +98,9 @@ class RequestManager {
             guard let mealData = jsonResult["meal"], let id = mealData["id"] as? Int else {return}
             
             meal.id = id
-            self.sendRequestToUpdateRating(meal, mealRating: meal.rating!, completion: {
-                (meal) in
-                meal.rating = meal.rating
-            })
+            
+            self.sendRequestToUpdateRating(meal, mealRating: meal.rating!)
+               
         })
         
         task.resume()
@@ -72,7 +108,7 @@ class RequestManager {
         
     }
     
-    func sendRequestToUpdateRating(_ meal: Meal!, mealRating: Int, completion: @escaping ((Meal) -> Void))  {
+    func sendRequestToUpdateRating(_ meal: Meal!, mealRating: Int)  {
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         let url = URL(string: "https://cloud-tracker.herokuapp.com")!
@@ -92,7 +128,7 @@ class RequestManager {
         var request = URLRequest(url: components.url!)
         
         request.setValue(Constants.content, forHTTPHeaderField: "Content-Type")
-        request.setValue(Constants.token, forHTTPHeaderField: "token")
+        request.setValue(UserDefaults.standard.object(forKey: "token") as? String, forHTTPHeaderField: "token")
         request.httpMethod = "POST"
         
         let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
@@ -117,7 +153,7 @@ class RequestManager {
         var request = URLRequest(url: url)
         
         request.setValue("", forHTTPHeaderField: "Content-Type")
-        request.setValue(Constants.token, forHTTPHeaderField: "token")
+        request.setValue(UserDefaults.standard.object(forKey: "token") as? String, forHTTPHeaderField: "token")
         request.httpMethod = "GET"
         
         let task = session.dataTask(with: request, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) -> Void in
@@ -154,30 +190,5 @@ class RequestManager {
         
     }
     
-    func signUpRequest(_ user: User){
-        let sessionConfig = URLSessionConfiguration.default
-        let session = URLSession(configuration: sessionConfig)
-        let url = URL(string: "https://cloud-tracker.herokuapp.com")!
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-        components.path = "/signup"
-        let usernameQueryItem = NSURLQueryItem(name: "username", value: user.username)
-        let passwordQueryItem = NSURLQueryItem(name: "password", value: user.password)
-        components.queryItems = [usernameQueryItem, passwordQueryItem] as [URLQueryItem]
-        var request = URLRequest(url: components.url!)
-        
-        request.setValue(Constants.content, forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "POST"
-        
-        let task = session.dataTask(with: request, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) -> Void in
-            if (error == nil){
-                //success
-                let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session task succeeded: \(statusCode)")
-            } else if let error = error {
-                //failed
-                let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session task succeeded: \(error.localizedDescription)")
-            }
-        })
-    }
+    
 }
