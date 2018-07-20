@@ -20,6 +20,7 @@ let wasLaunchedKey = "wasLaunched"
         UserDefaults.standard.set(false, forKey: "wasLaunched")
         UserDefaults.standard.set(false, forKey: "existing")
         UserDefaults.standard.set("", forKey: "token")
+        UserDefaults.standard.set(false, forKey: "wrongInfo")
 
 //        let meal1 = Meal(name: "test4", photo: nil, rating: 3, desc: "testing", calories: 600)
 //

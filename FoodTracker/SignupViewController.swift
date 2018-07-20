@@ -19,14 +19,19 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     var newUsernameTextField: UITextField!
     var newPasswordTextField: UITextField!
     var alert: UIAlertController!
+    var badInfoAlert: UIAlertController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         createAlert()
+        makeBadInfoAlert()
+        
+      
         
         requestManager = RequestManager()
         // Do any additional setup after loading the view.
     }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -62,7 +67,10 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
             
             //push to VC
             DispatchQueue.main.async {
-                
+                if UserDefaults.standard.bool(forKey: "wrongInfo") == true {
+                    self.present(self.badInfoAlert, animated: true, completion: nil)
+                    UserDefaults.standard.set(false, forKey: "wrongInfo")
+                }
                 // instantiate VC
                 let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
                 let rootVC = mainStoryboard.instantiateViewController(withIdentifier: "MealTableViewController") as UIViewController
@@ -128,5 +136,13 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         }
         
     }
+    
+    func makeBadInfoAlert(){
+        badInfoAlert = UIAlertController(title: "Log In", message: "Bad credentials. Try again", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Try Again", style: .destructive) { (action) in }
+        
+         badInfoAlert.addAction(okAction)
+    }
+    
     
 }

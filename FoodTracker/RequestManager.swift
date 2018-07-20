@@ -77,6 +77,10 @@ class RequestManager {
                 let statusCode = (response as! HTTPURLResponse).statusCode
                 print("Data task succeeded: \(statusCode)")
                 
+                if statusCode == 403 {
+                    UserDefaults.standard.set(true, forKey: "wrongInfo")
+                }
+                
             } else if let error = error {
                 //failed
                 print("data task failed with error: \(error.localizedDescription)")
