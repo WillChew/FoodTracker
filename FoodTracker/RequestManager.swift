@@ -41,7 +41,6 @@ class RequestManager {
                 UserDefaults.standard.set(true, forKey: "wasLaunched")
             } else if let error = error {
                 //failed
-                
                 print("URL Session task failed: \(error.localizedDescription)")
             }
             
@@ -91,7 +90,7 @@ class RequestManager {
     
     
     
-    func sendRequest(_ meal: Meal){
+    func newMealRequest(_ meal: Meal, completion: @escaping() -> Void){
         
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
@@ -134,9 +133,20 @@ class RequestManager {
             guard let mealData = jsonResult["meal"], let id = mealData["id"] as? Int else {return}
             
             meal.id = id
+             completion()
             
-            self.sendRequestToUpdateRating(meal, mealRating: meal.rating!)
-               
+            self.sendRequestToUpdateRating(meal, mealRating: meal.rating!){ _ in
+                print("updating rating")
+                completion()
+                self.getAllMeals(completion: { _ in
+                    print("got all")
+                })
+                
+            }
+
+//            self.getAllMeals(completion: {_ in
+//                print("got all")
+//            })
         })
         
         task.resume()
@@ -144,7 +154,7 @@ class RequestManager {
         
     }
     
-    func sendRequestToUpdateRating(_ meal: Meal!, mealRating: Int)  {
+    func sendRequestToUpdateRating(_ meal: Meal!, mealRating: Int, completion: @escaping() -> Void)  {
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         let url = URL(string: "https://cloud-tracker.herokuapp.com")!
@@ -176,6 +186,7 @@ class RequestManager {
                 //error
                 print("URL session task failed: \(error!.localizedDescription)")
             }
+            completion()
         })
         task.resume()
         session.finishTasksAndInvalidate()
@@ -203,10 +214,6 @@ class RequestManager {
             }
             guard let data = data else { return }
             guard let jsonResult = try! JSONSerialization.jsonObject(with: data) as? Array<Dictionary<String, Any?>> else { return }
-            
-            
-            
-            //            var mealArray = [Meal]()
             
             for meals in jsonResult {
                 

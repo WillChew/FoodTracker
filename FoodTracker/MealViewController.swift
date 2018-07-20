@@ -130,8 +130,10 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         meal = Meal(name: name, photo: photo, rating: rating, desc: desc, calories: calories)
 
         
-        requestManager.sendRequest(meal!)
-//        requestManager.sendRequestToUpdateRating(meal, mealRating: rating)
+        requestManager.newMealRequest(meal!) {
+            
+        }
+
         
     }
     

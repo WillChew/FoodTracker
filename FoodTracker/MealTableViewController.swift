@@ -172,7 +172,14 @@ class MealTableViewController: UITableViewController {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update an existing meal.
                 meals[selectedIndexPath.row] = meal
-                requestManager.sendRequest(meal)
+                
+                requestManager.newMealRequest(meal){
+                    DispatchQueue.main.async {
+                        
+                        self.tableView.reloadData()
+                        
+                    }
+                }
 
 //                tableView.reloadRows(at: [selectedIndexPath], with: .none)
             }
@@ -190,27 +197,6 @@ class MealTableViewController: UITableViewController {
     }
     
     //MARK: Private Methods
-    
-//    private func loadSampleMeals() {
-//
-//        let photo1 = UIImage(named: "meal1")
-//        let photo2 = UIImage(named: "meal2")
-//        let photo3 = UIImage(named: "meal3")
-//
-//        guard let meal1 = Meal(name: "Caprese Salad", photo: photo1, rating: 4, desc: "Tasty Caprese salad", calories: 150) else {
-//            fatalError("Unable to instantiate meal1")
-//        }
-//
-//        guard let meal2 = Meal(name: "Chicken and Potatoes", photo: photo2, rating: 5, desc: "best tasting chicken and potatoes", calories: 300) else {
-//            fatalError("Unable to instantiate meal2")
-//        }
-//
-//        guard let meal3 = Meal(name: "Pasta with Meatballs", photo: photo3, rating: 3, desc: "Could be better pasta", calories: 500) else {
-//            fatalError("Unable to instantiate meal2")
-//        }
-        
-//        meals += [meal1, meal2, meal3]
-    
     
     private func saveMeals() {
         let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(meals, toFile: Meal.ArchiveURL.path)
