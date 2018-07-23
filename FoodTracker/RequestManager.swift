@@ -141,16 +141,14 @@ class RequestManager {
             guard let mealData = jsonResult["meal"], let id = mealData["id"] as? Int else {return}
             
             meal.id = id
-             completion()
-            
-            self.sendRequestToUpdateRating(meal, mealRating: meal.rating!){ _ in
-                print("updating rating")
-                completion()
-                self.getAllMeals(completion: { _ in
-                    print("got all")
-                })
+            self.sendRequestToUpdateRating(meal, mealRating: meal.rating!) { (rating) in
+                meal.id = rating
                 
             }
+            
+             completion()
+            
+           
 
 //            self.getAllMeals(completion: {_ in
 //                print("got all")
@@ -162,7 +160,7 @@ class RequestManager {
         
     }
     
-    func sendRequestToUpdateRating(_ meal: Meal!, mealRating: Int, completion: @escaping() -> Void)  {
+    func sendRequestToUpdateRating(_ meal: Meal!, mealRating: Int, completion: @escaping(Int) -> ())  {
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         let url = URL(string: "https://cloud-tracker.herokuapp.com")!
@@ -194,7 +192,7 @@ class RequestManager {
                 //error
                 print("URL session task failed: \(error!.localizedDescription)")
             }
-            completion()
+            completion(mealRating)
         })
         task.resume()
         session.finishTasksAndInvalidate()

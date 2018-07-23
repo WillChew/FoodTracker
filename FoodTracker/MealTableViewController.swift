@@ -175,7 +175,6 @@ class MealTableViewController: UITableViewController {
                 
                 requestManager.newMealRequest(meal){
                     DispatchQueue.main.async {
-                        
                         self.tableView.reloadData()
                         
                     }
