@@ -11,12 +11,12 @@ import UIKit
 enum Constants {
     static let content = "application/json"
     static let token = "mzLeVQvHeMyoJy71stmYK99A"
-    static let clientID = "887c27b7d390539"
+    static let clientID = "Client-ID 887c27b7d390539"
 }
 
 class RequestManager {
     var meal: Meal!
-//    var token: String = UserDefaults.standard.object(forKey: "token") as! String
+    //    var token: String = UserDefaults.standard.object(forKey: "token") as! String
     
     
     func signUpRequest(_ user: User, completion: @escaping () -> Void) {
@@ -38,10 +38,10 @@ class RequestManager {
                 //success
                 let theStatusCode = (response as! HTTPURLResponse).statusCode
                 if theStatusCode == 409 {
-                     UserDefaults.standard.set(true, forKey: "existing")
+                    UserDefaults.standard.set(true, forKey: "existing")
                 } else {
-                print("URL Session task succeeded: \(theStatusCode)")
-                UserDefaults.standard.set(true, forKey: "wasLaunched")
+                    print("signup succeeded: \(theStatusCode)")
+                    UserDefaults.standard.set(true, forKey: "wasLaunched")
                 }
             } else if let error = error {
                 //failed
@@ -75,7 +75,7 @@ class RequestManager {
             if error == nil {
                 //success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("Data task succeeded: \(statusCode)")
+                print("Log in succeeded: \(statusCode)")
                 
                 if statusCode == 403 {
                     UserDefaults.standard.set(true, forKey: "wrongInfo")
@@ -125,7 +125,7 @@ class RequestManager {
             if (error == nil) {
                 // success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session task succeeded: HTTP \(statusCode)")
+                print("adding new meal succeeded: \(statusCode)")
                 
                 
             } else if let e = error {
@@ -142,17 +142,19 @@ class RequestManager {
             
             meal.id = id
             self.sendRequestToUpdateRating(meal, mealRating: meal.rating!) { (rating) in
-                meal.id = rating
-                
+                meal.rating = rating
             }
             
-             completion()
+            completion()
             
-           
-
-//            self.getAllMeals(completion: {_ in
-//                print("got all")
-//            })
+            self.getAllMeals(completion: { _ in
+                
+            })
+            
+            
+            //            self.getAllMeals(completion: {_ in
+            //                print("got all")
+            //            })
         })
         
         task.resume()
@@ -187,7 +189,7 @@ class RequestManager {
             if (error == nil) {
                 //success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session task succeeded: \(statusCode)")
+                print("updating rating succeeded: \(statusCode)")
             } else {
                 //error
                 print("URL session task failed: \(error!.localizedDescription)")
@@ -213,7 +215,7 @@ class RequestManager {
             if (error == nil) {
                 //success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session task succeeded: \(statusCode)")
+                print("getting meals succeeded: \(statusCode)")
             } else if let error = error{
                 //error
                 print("error: \(error.localizedDescription)")
@@ -234,6 +236,30 @@ class RequestManager {
             completion(mealArrayOriginal)
             
         })
+        task.resume()
+        session.finishTasksAndInvalidate()
+        
+    }
+    
+    func postImageRequest() {
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        let url = URL(string: "https://api.imgur.com/3/image")!
+        var request = URLRequest(url: url)
+        request.setValue(Constants.clientID, forHTTPHeaderField: "Authorization")
+        request.setValue("image/png", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            if error == nil {
+                //success
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("posting image success \(statusCode)")
+            } else if let error = error{
+                //fail
+                print("posting image failed with error: \(error.localizedDescription)")
+            }
+        }
         task.resume()
         session.finishTasksAndInvalidate()
         

@@ -75,7 +75,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                 let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
                 let rootVC = mainStoryboard.instantiateViewController(withIdentifier: "MealTableViewController") as UIViewController
                 
-                
+                UserDefaults.standard.set(true, forKey: "wasLaunched")
+
                 self.navigationController?.pushViewController(rootVC, animated: true)
                 
             }
@@ -132,6 +133,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                     
                 } else {
                     self.navigationController?.pushViewController(rootVC, animated: true)
+                    UserDefaults.standard.set(true, forKey: "wasLaunched")
                 }
             }
         }

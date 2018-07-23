@@ -22,7 +22,8 @@ class MealTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        requestManager = RequestManager()
+
         if let savedMeals = loadMeals() {
             meals += savedMeals
         }
@@ -34,17 +35,18 @@ class MealTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchMeals()
+//            self.tableView2.reloadData()
+        
         
     }
     
     func fetchMeals() {
-        requestManager = RequestManager()
         requestManager.getAllMeals { (meals) in
             print(meals.count)
             self.meals = meals
             
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.tableView2.reloadData()
             }
             
         }
