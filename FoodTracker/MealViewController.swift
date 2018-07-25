@@ -9,6 +9,11 @@
 import UIKit
 import os.log
 
+
+protocol MealViewControllerDelegate: class {
+    func didCreateMeal()
+}
+
 class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var requestManager: RequestManager!
     
@@ -17,12 +22,11 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var ratingControl: RatingControl!
     @IBOutlet weak var saveButton: UIBarButtonItem!
-    
+    weak var delegate: MealViewControllerDelegate?
     @IBOutlet weak var caloriesTextField: UITextField!
     
     @IBOutlet weak var descriptionTextField: UITextField!
     
-
     /*
          This value is either passed by `MealTableViewController` in `prepare(for:sender:)`
          or constructed as part of adding a new meal.
@@ -122,7 +126,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         let desc = descriptionTextField.text ?? ""
         let calories = Int(caloriesTextField.text!) ?? 0
         
-
+        
         
 //        caloriesInt = 400
         // Set the meal to be passed to MealTableViewController after the unwind segue.
@@ -131,6 +135,8 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
 
         
         requestManager.newMealRequest(meal!) {
+            
+            self.delegate?.didCreateMeal()
             
         }
 

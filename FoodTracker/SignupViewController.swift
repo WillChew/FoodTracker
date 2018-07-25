@@ -86,6 +86,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func signupButtonPressed(_ sender: UIButton) {
         present(self.alert, animated: true, completion: nil)
+        
     }
     
     func createAlert() {
@@ -116,6 +117,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     func submitButtonPressed2(alert: UIAlertAction!){
         guard let username = newUsernameTextField.text, let password = newPasswordTextField.text else {
             return
+            
         }
         
         let newUser = User(username: username, password: password)

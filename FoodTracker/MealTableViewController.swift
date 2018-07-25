@@ -170,16 +170,17 @@ class MealTableViewController: UITableViewController {
     
     @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
         if let sourceViewController = sender.source as? MealViewController, let meal = sourceViewController.meal {
+            sourceViewController.delegate = self
             
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update an existing meal.
                 meals[selectedIndexPath.row] = meal
                 
                 requestManager.newMealRequest(meal){
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        
-                    }
+                    
+                    
+                    self.fetchMeals()
+                    
                 }
 
 //                tableView.reloadRows(at: [selectedIndexPath], with: .none)
@@ -212,4 +213,11 @@ class MealTableViewController: UITableViewController {
         return NSKeyedUnarchiver.unarchiveObject(withFile: Meal.ArchiveURL.path) as? [Meal]
     }
     
+}
+
+extension MealTableViewController: MealViewControllerDelegate {
+    func didCreateMeal() {
+        self.fetchMeals()
+        
+    }
 }

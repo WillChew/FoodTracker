@@ -10,13 +10,13 @@ import UIKit
 
 enum Constants {
     static let content = "application/json"
-    static let token = "mzLeVQvHeMyoJy71stmYK99A"
+    
     static let clientID = "Client-ID 887c27b7d390539"
 }
 
 class RequestManager {
     var meal: Meal!
-    //    var token: String = UserDefaults.standard.object(forKey: "token") as! String
+    
     
     
     func signUpRequest(_ user: User, completion: @escaping () -> Void) {
@@ -52,6 +52,7 @@ class RequestManager {
             guard let jsonresult = try! JSONSerialization.jsonObject(with: data) as? Dictionary<String,Any?>  else { return }
             let token = jsonresult["token"] as? String
             UserDefaults.standard.set(token, forKey: "token")
+            
             completion()
         })
         task.resume()
@@ -79,7 +80,10 @@ class RequestManager {
                 
                 if statusCode == 403 {
                     UserDefaults.standard.set(true, forKey: "wrongInfo")
+                    
                 }
+                
+               
                 
             } else if let error = error {
                 //failed
@@ -89,6 +93,7 @@ class RequestManager {
             guard let jsonResult = try! JSONSerialization.jsonObject(with: data) as? Dictionary<String,Any?>  else { return }
             let token = jsonResult["token"] as? String
             UserDefaults.standard.set(token, forKey: "token")
+            
             completion()
             
         })
@@ -143,18 +148,21 @@ class RequestManager {
             meal.id = id
             self.sendRequestToUpdateRating(meal, mealRating: meal.rating!) { (rating) in
                 meal.rating = rating
+                
+                self.postPhotoRequest(meal, mealPhoto: meal.photo!) {(imageURLStr) in
+                    self.updatePhotoRequest(meal, imageLinkStr: imageURLStr) {
+                        guard let imageURL = URL(string: imageURLStr), let imageData = try? Data(contentsOf: imageURL) else { return }
+                        
+                        let mealImageFromUrl = UIImage(data: imageData)
+                        meal.photo = mealImageFromUrl
+                        completion()
+
+                    }
+                    
+                }
             }
             
-            completion()
             
-            self.getAllMeals(completion: { _ in
-                
-            })
-            
-            
-            //            self.getAllMeals(completion: {_ in
-            //                print("got all")
-            //            })
         })
         
         task.resume()
@@ -225,11 +233,16 @@ class RequestManager {
             
             for meals in jsonResult {
                 
-                guard let title = meals["title"], let photo = meals["imagePath"], let desc = meals["description"], let rating = meals["rating"] else {
+                guard let title = meals["title"], let photo = meals["imagePath"] , let desc = meals["description"], let rating = meals["rating"] else {
                     return
                 }
                 
-                let newMeal = Meal(name: title as! String, photo: photo as? UIImage, rating: rating as? Int, desc: desc as! String, calories: meals["calories"] as! Int)
+                var mealPhoto: UIImage? 
+                if let photoString = photo as? String, let imageUrl = URL(string: photoString), let imageData = try? Data(contentsOf: imageUrl), let image = UIImage(data: imageData) {
+                    mealPhoto = image
+                }
+                
+                let newMeal = Meal(name: title as! String, photo: mealPhoto, rating: rating as? Int, desc: desc as! String, calories: meals["calories"] as! Int)
                 
                 mealArrayOriginal.append(newMeal!)
             }
@@ -241,29 +254,80 @@ class RequestManager {
         
     }
     
-    func postImageRequest() {
+    func updatePhotoRequest(_ meal: Meal!, imageLinkStr: String, completion: @escaping() -> ()) {
+        
+        
+        
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
-        let url = URL(string: "https://api.imgur.com/3/image")!
-        var request = URLRequest(url: url)
-        request.setValue(Constants.clientID, forHTTPHeaderField: "Authorization")
-        request.setValue("image/png", forHTTPHeaderField: "Content-Type")
+        let url = URL(string: "https://cloud-tracker.herokuapp.com")!
+        
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        
+        guard let mealID = meal.id else { return }
+        components.path = "/users/me/meals/\(mealID)/photo"
+        let linkQueryItem = URLQueryItem(name: "photo", value: imageLinkStr)
+        components.queryItems = [linkQueryItem]
+        
+        
+        var request = URLRequest(url: components.url!)
+        request.setValue(UserDefaults.standard.object(forKey: "token") as? String, forHTTPHeaderField: "token")
         request.httpMethod = "POST"
         let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             
             if error == nil {
                 //success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("posting image success \(statusCode)")
+                print("updating image success \(statusCode)")
+                
             } else if let error = error{
                 //fail
                 print("posting image failed with error: \(error.localizedDescription)")
             }
+            
+            completion()
         }
         task.resume()
         session.finishTasksAndInvalidate()
         
     }
+    
+    func postPhotoRequest(_ meal: Meal, mealPhoto: UIImage, completion: @escaping(String) -> ()) {
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        let url = URL(string: "https://api.imgur.com/3/image")!
+        
+        
+        guard  let imageData = UIImagePNGRepresentation(mealPhoto) else { return }
+        
+        var request = URLRequest(url: url)
+        request.setValue(Constants.clientID, forHTTPHeaderField: "Authorization")
+        request.setValue("image/png", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        request.httpBody = imageData
+        
+        let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            if error == nil {
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("Photo posting successful : \(statusCode)")
+            } else {
+                print("Error with code: \(error?.localizedDescription)")
+            }
+            guard let data = data else { return }
+            guard let jsonResult = try! JSONSerialization.jsonObject(with: data) as? Dictionary<String, Any?>, let jsonData = jsonResult["data"] as? Dictionary<String, Any?> else { return }
+            guard let link = jsonData["link"] as? String else { return }
+            
+            
+            
+            //            guard let mealImage = UIImage(data: imageData) else { return }
+            completion(link)
+        }
+        
+        task.resume()
+        session.finishTasksAndInvalidate()
+    }
+    
+    
     
     
 }

@@ -17,7 +17,7 @@ let wasLaunchedKey = "wasLaunched"
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-//        UserDefaults.standard.set(false, forKey: "wasLaunched")
+        UserDefaults.standard.set(false, forKey: "wasLaunched")
         UserDefaults.standard.set(false, forKey: "existing")
 //        UserDefaults.standard.set("", forKey: "token")
         UserDefaults.standard.set(false, forKey: "wrongInfo")
