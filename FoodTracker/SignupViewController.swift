@@ -26,7 +26,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         createAlert()
         makeBadInfoAlert()
         
-      
+        
         
         requestManager = RequestManager()
         // Do any additional setup after loading the view.
@@ -76,7 +76,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                 let rootVC = mainStoryboard.instantiateViewController(withIdentifier: "MealTableViewController") as UIViewController
                 
                 UserDefaults.standard.set(true, forKey: "wasLaunched")
-
+                
                 self.navigationController?.pushViewController(rootVC, animated: true)
                 
             }
@@ -146,7 +146,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         badInfoAlert = UIAlertController(title: "Log In", message: "Bad credentials", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Try Again", style: .destructive) { (action) in }
         
-         badInfoAlert.addAction(okAction)
+        badInfoAlert.addAction(okAction)
     }
     
     

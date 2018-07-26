@@ -27,15 +27,12 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     
     @IBOutlet weak var descriptionTextField: UITextField!
     
-    /*
-         This value is either passed by `MealTableViewController` in `prepare(for:sender:)`
-         or constructed as part of adding a new meal.
-     */
+    
     var meal: Meal?
-   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-         requestManager = RequestManager()
+        requestManager = RequestManager()
         // Handle the text field’s user input through delegate callbacks.
         nameTextField.delegate = self
         
@@ -128,18 +125,16 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         
         
         
-//        caloriesInt = 400
-        // Set the meal to be passed to MealTableViewController after the unwind segue.
-//        meal = Meal(name: name, photo: photo, rating: rating, )
+        
         meal = Meal(name: name, photo: photo, rating: rating, desc: desc, calories: calories)
-
+        
         
         requestManager.newMealRequest(meal!) {
             
             self.delegate?.didCreateMeal()
             
         }
-
+        
         
     }
     
@@ -160,7 +155,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         present(imagePickerController, animated: true, completion: nil)
     }
     @IBAction func saveButtonPressed(_ sender: Any) {
-
+        
     }
     
     //MARK: Private Methods

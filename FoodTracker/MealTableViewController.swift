@@ -19,11 +19,11 @@ class MealTableViewController: UITableViewController {
     var meals = [Meal]()
     
     var requestManager: RequestManager!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         requestManager = RequestManager()
-
+        
         if let savedMeals = loadMeals() {
             meals += savedMeals
         }
@@ -35,7 +35,7 @@ class MealTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchMeals()
-//            self.tableView2.reloadData()
+        //            self.tableView2.reloadData()
         
         
     }
@@ -114,20 +114,6 @@ class MealTableViewController: UITableViewController {
     }
     
     
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-     
-     }
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
     
     
     //MARK: - Navigation
@@ -162,7 +148,7 @@ class MealTableViewController: UITableViewController {
         default:
             fatalError("Unexpected Segue Identifier; \(segue.identifier!)")
         }
-//        tableView.reloadData()
+        //        tableView.reloadData()
     }
     
     
@@ -182,15 +168,15 @@ class MealTableViewController: UITableViewController {
                     self.fetchMeals()
                     
                 }
-
-//                tableView.reloadRows(at: [selectedIndexPath], with: .none)
-            }
-//            else {
-                // Add a new meal.
-//                let newIndexPath = IndexPath(row: meals.count, section: 0)
                 
-//                tableView.insertRows(at: [newIndexPath], with: .automatic)
-//            }
+                //                tableView.reloadRows(at: [selectedIndexPath], with: .none)
+            }
+            //            else {
+            // Add a new meal.
+            //                let newIndexPath = IndexPath(row: meals.count, section: 0)
+            
+            //                tableView.insertRows(at: [newIndexPath], with: .automatic)
+            //            }
             
             // Save the meals.
             saveMeals()

@@ -10,7 +10,6 @@ import UIKit
 
 enum Constants {
     static let content = "application/json"
-    
     static let clientID = "Client-ID 887c27b7d390539"
 }
 
@@ -83,7 +82,7 @@ class RequestManager {
                     
                 }
                 
-               
+                
                 
             } else if let error = error {
                 //failed
@@ -156,7 +155,7 @@ class RequestManager {
                         let mealImageFromUrl = UIImage(data: imageData)
                         meal.photo = mealImageFromUrl
                         completion()
-
+                        
                     }
                     
                 }

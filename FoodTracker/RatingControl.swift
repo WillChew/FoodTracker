@@ -25,7 +25,7 @@ import UIKit
             setupButtons()
         }
     }
-
+    
     @IBInspectable var starCount: Int = 5 {
         didSet {
             setupButtons()
@@ -38,7 +38,7 @@ import UIKit
         super.init(frame: frame)
         setupButtons()
     }
-
+    
     required init(coder: NSCoder) {
         super.init(coder: coder)
         setupButtons()
@@ -124,7 +124,7 @@ import UIKit
             } else {
                 hintString = nil
             }
-
+            
             let valueString: String
             switch (rating) {
             case 0:
